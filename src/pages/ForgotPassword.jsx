@@ -43,7 +43,7 @@ export default function ForgotPassword() {
                 <Link to="/sign-up" className='text-red-600 hover:text-red-700 transition duration-200 ease-in-out ml-1'> aqui</Link>
               </p>
               <p>
-                <Link to={"/sign-in"} className='text-blue-600 hover:text-blue-700 transition duration-200 ease-in-out'> Fazer login
+                <Link to={"/sign-in"} className='text-green-600 hover:text-green-700 transition duration-200 ease-in-out'> Fazer login
                 </Link>
               </p>
             </div>

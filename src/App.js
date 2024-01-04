@@ -6,6 +6,8 @@ import SignUp from "./pages/SignUp";
 import Vias from "./pages/Vias";
 import ForgotPassword from "./pages/ForgotPassword";
 import Header from "./components/Header";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <>
@@ -20,6 +22,19 @@ function App() {
         <Route path='/vias' element={<Vias/>}/>
       </Routes>
     </Router>
+    <ToastContainer
+      position="top-right"
+      autoClose={1500}
+      limit={1}
+      hideProgressBar={false}
+      newestOnTop
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+    />
     </>
   );
 }
