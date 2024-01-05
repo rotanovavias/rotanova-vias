@@ -73,8 +73,8 @@ export default function SignIn() {
             ) : ( <AiFillEye className='absolute right-3 top-3 text-xl cursor-pointer' onClick={()=>setShowPassword((prevState)=>!prevState)}/>)}
             </div>
             <div className='flex justify-between whitespace-nowrap text-sm sm:text-lg'>
-              <p className="mb-6">Não tem um usuário? Crie um 
-                <Link to="/sign-up" className='text-red-600 hover:text-red-700 transition duration-200 ease-in-out ml-1'> aqui</Link>
+              <p className="mb-6">Não tem cadastro? Crie
+                <Link to="/sign-up" className='text-red-600 hover:text-red-700 transition duration-200 ease-in-out ml-1'> um</Link>
               </p>
               <p>
                 <Link to={"/forgot-password"} className='text-blue-600 hover:text-blue-700 transition duration-200 ease-in-out'> Esqueceu a senha?
@@ -85,7 +85,7 @@ export default function SignIn() {
               Entrar
           </button>
           <div className='flex items-center my-4 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300'>
-            <p className='text-center font-semibold mx-4'>OR</p>
+            <p className='text-center font-semibold mx-4'>OU</p>
           </div>
           <OAuth/>
           </form>

@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { toast } from 'react-toastify';
+import { sendPasswordResetEmail, getAuth } from 'firebase/auth';
+
 
 
 export default function ForgotPassword() {
@@ -10,6 +13,18 @@ export default function ForgotPassword() {
 
   function onChange(e) {
     setEmail((prevState)=>(e.target.value))
+  }
+
+  async function onSubmit(e){
+    e.preventDefault()
+    try {
+      const auth = getAuth()
+      await sendPasswordResetEmail(auth, email)
+      toast.success("Email de recuperação de senha enviado") 
+      
+    } catch (error) {
+      toast.error("Erro ao enviar email de recuperação")
+    }
   }
 
   return (
@@ -27,7 +42,7 @@ export default function ForgotPassword() {
           />             
         </div>
         <div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type='email'
               id="email" 
@@ -51,7 +66,7 @@ export default function ForgotPassword() {
               Enviar um email de recuperação de senha
           </button>
           <div className='flex items-center my-4 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300'>
-            <p className='text-center font-semibold mx-4'>OR</p>
+            <p className='text-center font-semibold mx-4'>OU</p>
           </div>
           <OAuth/>
           </form>
