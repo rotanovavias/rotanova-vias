@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
 export default function Header() {
-
+  const [pageState, setPageState] = useState("Sign in");
   const location = useLocation()
   const navigate = useNavigate()
+  const auth = getAuth();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user)=>{
+      if(user){
+        setPageState("Perfil")
+      } else {
+        setPageState("Entrar");
+      }
+    });
+  }, [auth])
+
   console.log(location.pathname);
-  function pathMathRoute(route){
+  function pathMatchRoute(route){
     if (route === location.pathname){
       return true
     }
@@ -22,22 +34,22 @@ export default function Header() {
               />
               <ul className='flex space-x-5'>
                 <li className={`cursor-pointer py-3 text-sm font-semibold ${
-                    pathMathRoute("/") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
+                    pathMatchRoute("/") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
                   }`}
                   onClick={() => navigate("/")}
                 >Home</li>
 
                 <li className={`cursor-pointer py-3 text-sm font-semibold ${
-                    pathMathRoute("/vias") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
+                    pathMatchRoute("/vias") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
                   }`}
                 onClick={() => navigate("/vias")}
                 >Vias</li>
 
                 <li className={`cursor-pointer py-3 text-sm font-semibold ${
-                    pathMathRoute("/sign-in") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
+                    pathMatchRoute("/sign-in") || pathMatchRoute("/profile") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
                   }`}
-                onClick={() => navigate("/sign-in")}
-                >Entrar</li>
+                onClick={() => navigate("/profile")}
+                >{pageState}</li>
               </ul>
             </header>
           </div>
