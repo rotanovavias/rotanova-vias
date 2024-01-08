@@ -76,7 +76,7 @@ export default function SignUp() {
                 value={name} 
                 onChange={onChange}
                 placeholder='Name'
-                className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
+                className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out mb-2'
               />
               <input
                 type='email'
@@ -84,7 +84,7 @@ export default function SignUp() {
                 value={email} 
                 onChange={onChange}
                 placeholder='Email address'
-                className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
+                className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out mb-2'
               />
               <div className='relative'>
               <input 
@@ -93,7 +93,7 @@ export default function SignUp() {
                 value={password} 
                 onChange={onChange}
                 placeholder='Password'
-                className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out'
+                className='w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out mb-4'
               />
             {showPassword? (<AiFillEyeInvisible className='absolute right-3 top-3 text-xl cursor-pointer' onClick={()=>setShowPassword((prevState)=>!prevState)} />
             ) : ( <AiFillEye className='absolute right-3 top-3 text-xl cursor-pointer' onClick={()=>setShowPassword((prevState)=>!prevState)}/>)}

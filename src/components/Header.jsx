@@ -21,18 +21,21 @@ export default function Header() {
                 onClick={() => navigate("/")}
               />
               <ul className='flex space-x-5'>
-                <li className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent
-                ${pathMathRoute("/") && "text-black border-b-red-500"}`}
+                <li className={`cursor-pointer py-3 text-sm font-semibold ${
+                    pathMathRoute("/") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
+                  }`}
                   onClick={() => navigate("/")}
                 >Home</li>
 
-                <li className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent
-                ${pathMathRoute("/vias") && "text-black border-b-red-500"}`} 
+                <li className={`cursor-pointer py-3 text-sm font-semibold ${
+                    pathMathRoute("/vias") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
+                  }`}
                 onClick={() => navigate("/vias")}
                 >Vias</li>
 
-                <li className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-b-transparent
-                ${pathMathRoute("/sign-in") && "text-black border-b-red-500"}`}
+                <li className={`cursor-pointer py-3 text-sm font-semibold ${
+                    pathMathRoute("/sign-in") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
+                  }`}
                 onClick={() => navigate("/sign-in")}
                 >Entrar</li>
               </ul>
