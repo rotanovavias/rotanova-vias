@@ -24,7 +24,7 @@ export default function Header() {
     }
   }
   return (
-      <div className='bg-white border-b shadow-sm sticky top-0 z-50'>
+      <div className='bg-white border-b shadow-sm sticky top-0 z-40'>
             <header className='flex justify-between items-center px-3 max-w-6xl mx-auto'>
               <img
                 src='https://firebasestorage.googleapis.com/v0/b/rotanovavias.appspot.com/o/rota.svg?alt=media&token=0be8835b-8fd5-441b-95fd-134155535ea2'
