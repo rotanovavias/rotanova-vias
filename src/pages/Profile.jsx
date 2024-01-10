@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
 import { doc, updateDoc } from 'firebase/firestore'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { db } from '../firebase';
+import { FaTruckArrowRight } from "react-icons/fa6";
+
 
 export default function Profile() {
   const auth = getAuth()
@@ -66,10 +68,13 @@ export default function Profile() {
               </p>
               <p onClick={onLogout} className='text-blue-600 hover:text-blue-700 cursor-pointer ml-1 transition ease-in-out duration-200'> Sair </p>
             </div>
-
-
-
           </form>
+          <button type='submit' className='w-full bg-blue-600 text-white px-7 py-3 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800 mt-4'>
+            <Link to={"/create-vias"} className='flex justify-center items-center ' >
+              <FaTruckArrowRight className='mr-3 text-3xl bg-blue-500 rounded-full p-1 border-2'/>
+                Enviar novos canhotos
+            </Link>
+          </button>
         </div>
       </section>
     </>
