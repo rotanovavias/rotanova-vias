@@ -18,13 +18,15 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path="/profile" element={<PrivateRoute />}> 
-          <Route path='/profile' element={<Profile/>}/>
+           <Route path='/profile' element={<Profile/>}/>
         </Route>
         <Route path='/sign-in' element={<SignIn/>}/>
         <Route path='/sign-up' element={<SignUp/>}/>
         <Route path='/forgot-password' element={<ForgotPassword/>}/>
         <Route path='/vias' element={<Vias/>}/>
-        <Route path='/create-vias' element={<CreateVias/>}/>
+        <Route path="/create-vias" element={<PrivateRoute/>}>
+           <Route path='/create-vias' element={<CreateVias/>}/>
+        </Route>
       </Routes>
     </Router>
     <ToastContainer
