@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
-import { collection, doc, orderBy, query, updateDoc, getDocs, where } from 'firebase/firestore'; 
+import { collection, doc, orderBy, query, updateDoc, getDocs, where, deleteDoc } from 'firebase/firestore'; 
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { db } from '../firebase';
@@ -68,6 +68,20 @@ export default function Profile() {
     }
     fetchUserListings();
   }, [auth.currentUser.uid])
+
+  async function onDelete(listingID){
+    if(window.confirm("Você tem certeza que deseja excluir esse arquivo?")){
+      await deleteDoc(doc(db, "listings", listingID))
+      const updatedListings = listings.filter(
+        (listing) => listing.id !== listingID
+      );
+      setListings(updatedListings)
+      toast.success("Arquivo foi deletado com sucesso!")
+    }
+  }
+  function onEdit(listingID){
+    navigate(`/edit-listing/${listingID}`)
+  }
   return (
     <>
       <section className='max-w-6xl mx-auto flex justify-center items-center flex-col'>
@@ -110,6 +124,8 @@ export default function Profile() {
                   key={listing.id}
                   id={listing.id}
                   listing={listing.data}
+                  onDelete={()=>onDelete(listing.id)}
+                  onEdit={()=>onEdit(listing.id)}
                   />
 
               ))}

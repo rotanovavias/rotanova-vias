@@ -37,6 +37,7 @@ export default function CreateVias() {
     if (e.target.value === "false"){
         boolean = false;
     }
+
     //Files
     if (e.target.files){
         setFormData((prevState)=>({
@@ -117,14 +118,15 @@ export default function CreateVias() {
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
     setLoading(false)
     toast.success("Via enviada!!")
-    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
+    // navigate(`/category/${formDataCopy.type}/${docRef.id}`); REDIRECIONA PARA A PÁGINA DA VIA ENVIADA
+    navigate(`/profile`); //REDIRECIONA PARA A PÁGINA DE PERFIL
   }
         if(loading){
     return <Spinner />;
   }
   return (
     <main className='max-w-xl px-2 mx-auto'>
-        <h1 className='3xl text-center mt-6 font-bold'>Cadastro de CT's</h1>
+        <h3 className='3xl text-center mt-6 font-bold'>Cadastro de CT's</h3>
         <form onSubmit={onSubmit}>
             <p className='text-lg mt-6 font-semibold'>Tipo do produto</p>
             <div className='flex'>
@@ -191,7 +193,7 @@ export default function CreateVias() {
                 <input type='text' id='carregamento' value={carregamento} onChange={onChange}  className='w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-2 text-center'/>
 
            <p className='text-lg mt-6 font-semibold'>Local de Entrega</p>
-                <textarea type='text' id='descarga' value={descarga} onChange={onChange}  className='w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-2 text-center'/>
+                <input type='text' id='descarga' value={descarga} onChange={onChange}  className='w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-2 text-center'/>
                 {!geolocationEnabled && (
                     <div className="flex space-x-6 justify-start mb-6">
                         <div className="">
