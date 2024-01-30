@@ -33,12 +33,12 @@ export default function EditVias() {
 
   const params = useParams()
 
-  useEffect(()=>{
+  useEffect(() => {
     if(listing && listing.userRef !== auth.currentUser.uid){
-        toast.error("Você não pode editar esse arquivo!")
-        navigate("/")
+        toast.error("Você não pode editar esse arquivo!");
+        navigate("/");
     }
-  }, [auth.currentUser.uid, listing, navigate])
+  }, [auth.currentUser.uid, listing, navigate]);
 
   useEffect(() => {
     setLoading(true);

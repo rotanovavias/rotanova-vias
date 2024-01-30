@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import CreateVias from "./pages/CreateVias";
 import EditVias from "./pages/EditVias";
+import Listing from "./pages/Listing";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path='/sign-up' element={<SignUp/>}/>
         <Route path='/forgot-password' element={<ForgotPassword/>}/>
         <Route path='/vias' element={<Vias/>}/>
+        <Route path='/category/:categoryName/:listingId' element={<Listing/>}/>
         <Route path="/create-vias" element={<PrivateRoute/>}>
            <Route path='/create-vias' element={<CreateVias/>}/>
         </Route>
