@@ -10,6 +10,8 @@ import Header from "./components/Header";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import CreateVias from "./pages/CreateVias";
+import EditVias from "./pages/EditVias";
+
 function App() {
   return (
     <>
@@ -26,6 +28,9 @@ function App() {
         <Route path='/vias' element={<Vias/>}/>
         <Route path="/create-vias" element={<PrivateRoute/>}>
            <Route path='/create-vias' element={<CreateVias/>}/>
+        </Route>
+        <Route path="/edit-vias" element={<PrivateRoute/>}>
+           <Route path='/edit-vias/:listingId' element={<EditVias/>}/>
         </Route>
       </Routes>
     </Router>

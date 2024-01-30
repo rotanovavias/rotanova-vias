@@ -45,8 +45,7 @@ export default function SignUp() {
       delete formDataCopy.password
       formDataCopy.timestamp = serverTimestamp();
 
-      await setDoc(doc(db, "users", user.
-      uid), formDataCopy)
+      await setDoc(doc(db, "users", user.uid), formDataCopy)
       navigate("/")
       toast.success("Cadastrado com sucesso!")
     } catch (error) {
