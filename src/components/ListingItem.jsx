@@ -14,19 +14,11 @@ export default function ListingItem({listing, id, onDelete, onEdit, colorClass})
         loading="lazy"
         src={listing.imgUrls[0]} 
          />
-         
-        {/* <Moment className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg" format="DD/MM/YYYY" >
-          {listing.timestamp?.toDate()}
-        </Moment> */}
-        {/* <p className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg">{listing.dia}</p> */}
   
         <p className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg">
         {new Date(listing.dia).toLocaleDateString('pt-BR')}
         </p>
-        
-        {/* <p className={`absolute top-2 left-2 text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg ${colorClass}`}>
-          {new Date(listing.dia).toLocaleDateString('pt-BR')}
-        </p> */}
+      
         <div className="w-full p-[10px]">
           <div className="flex items-center space-x-1">
             <MdLocationOn className="h-4 w-4 text-green-600"/>

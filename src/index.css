@@ -10,10 +10,73 @@ body{
 
 .swiper-button-next:after,
 .swiper-button-prev:after{
-    color: #a8dadc;
+    color: #c60f5b;
 }
 
 .swiper-pagination-progressbar,
 .swiper-pagination-progressbar-fill{
-    background: #a8dadc !important
+    background: #6f6bb3 !important
+}
+
+@keyframes blinking {
+    0% {
+      color: black;
+    }
+    50% {
+      color: red;
+    }
+    100% {
+      color: black;
+    }
+  }
+  
+  .blinking-text {
+    animation: blinking 1s infinite alternate;
+  }
+
+  .swiper-container {
+    width: 600px;
+    height: 200px;
+	.swiper-slide{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
+.swiper-progress-bar{
+	width: 600px;
+    height: 4px;
+	position: relative;
+	margin: 20px auto;
+	background: #eeeeee;
+	.progress{
+		height: inherit;
+		left: 0;
+		top: 0;
+		position: absolute;
+		background: #007aff;
+		z-index: 1;
+	}
+	.progress-sections{
+		left: 0;
+		top: 0;
+		position: absolute;
+		height: inherit;
+		width: inherit;
+		z-index: 2;
+		display: flex;
+		flex-direction: row;
+		span{
+			flex: 1;
+			height: inherit;
+			border-right: 2px solid #eee;
+			&:last-child{
+				border-right-width: 0;
+			}
+		}
+	}
+}
+.swiper-counter{
+	width: 600px;
+	margin: 0 auto;
 }

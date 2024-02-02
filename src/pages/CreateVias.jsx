@@ -7,6 +7,7 @@ import {v4 as uuidv4} from "uuid";
 import {addDoc, collection, serverTimestamp} from "firebase/firestore"
 import {db} from "../firebase"
 import { useNavigate } from 'react-router-dom';
+import PhoneInput from 'react-phone-number-input/input'
 
 export default function CreateVias() {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ export default function CreateVias() {
     carregamento: "",
     descarga: "",
     dia: "",
-    whatsapp: "",
+    whatsapp: "55",
     obs: "",
     latitude: 0,
     longitude: 0,
@@ -124,6 +125,7 @@ export default function CreateVias() {
         if(loading){
     return <Spinner />;
   }
+  
   return (
     <main className='max-w-xl px-2 mx-auto'>
         <h3 className='3xl text-center mt-6 font-bold'>Cadastro de CT's</h3>
@@ -238,6 +240,7 @@ export default function CreateVias() {
                 <div className='flex items-center'>
                     <p className='text-lg font-semibold ml-2'>WhatsApp:</p>
                     <input
+                        country='BR'
                         type='text'
                         id='whatsapp'
                         value={whatsapp}
