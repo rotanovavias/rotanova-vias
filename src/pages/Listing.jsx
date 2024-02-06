@@ -69,6 +69,9 @@ export default function Listing() {
               {new Date(listing.dia).toLocaleDateString("pt-BR")}
             </span>
           </p>
+          <p className="">
+            Número da nota fiscal: <span>{listing.nf}</span>
+          </p>
           <p className="mt-20">
             Status: <span className="blinking-text">{listing.obs}</span>
           </p>

@@ -1,128 +1,154 @@
-import React, { useState } from 'react'
-import Spinner from "../components/Spinner";
+import React, { useState } from 'react';
+import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
-import {getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage'
-import {getAuth} from 'firebase/auth'
-import {v4 as uuidv4} from "uuid"; 
-import {addDoc, collection, serverTimestamp} from "firebase/firestore"
-import {db} from "../firebase"
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
+import { v4 as uuidv4 } from 'uuid';
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+} from 'firebase/firestore';
+import { db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import PhoneInput from 'react-phone-number-input/input'
 
 export default function CreateVias() {
-  const navigate = useNavigate()
-  const auth = getAuth()
-  const [geolocationEnabled] = useState(true) //desativado pois necessita metodo de pagamento
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const [geolocationEnabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    type: "gesso",
-    ct: "",
-    nf: "",
-    motorista: "",
-    carregamento: "",
-    descarga: "",
-    dia: "",
-    whatsapp: "55",
-    obs: "",
+    type: 'gesso',
+    ct: '',
+    nf: '',
+    motorista: '',
+    carregamento: '',
+    descarga: '',
+    dia: '',
+    whatsapp: '55',
+    obs: '',
     latitude: 0,
     longitude: 0,
-    images: {}
+    images: {},
   });
-  
-  const {type, ct, nf, motorista, carregamento, descarga, dia, whatsapp, obs, latitude, longitude, images} = formData;
-  function onChange(e){
-    let boolean = null;
-    if (e.target.value === "true"){
-        boolean = true;
-    }
-    if (e.target.value === "false"){
-        boolean = false;
-    }
 
-    //Files
-    if (e.target.files){
-        setFormData((prevState)=>({
-            ...prevState,
-            images: e.target.files
-        }))
+  const {
+    type,
+    ct,
+    nf,
+    motorista,
+    carregamento,
+    descarga,
+    dia,
+    whatsapp,
+    obs,
+    latitude,
+    longitude,
+    images,
+  } = formData;
+
+  function onChange(e) {
+    let boolean = null;
+    if (e.target.value === "true") {
+      boolean = true;
     }
-    //Text/boolean/numbers
-    if (!e.target.files){
-        setFormData((prevState)=>({
-            ...prevState,
-            [e.target.id]: boolean ?? e.target.value,
-        }));
+    if (e.target.value === "false") {
+      boolean = false;
+    }
+  
+    // Files
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files
+      }));
+    }
+    
+    // Text/boolean/numbers
+    if (!e.target.files) {
+      let value = e.target.value;
+      if (e.target.id === "motorista" || e.target.id === "carregamento" || e.target.id === "descarga") {
+        // Converte para maiúsculas se o campo for "motorista", "carregamento" ou "descarga"
+        value = value.toUpperCase();
+      }
+      
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: boolean ?? value
+      }));
     }
   }
-  async function onSubmit(e){
+
+  async function onSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    if(images.length > 6){
-        setLoading(false);
-        toast.error("O número máximo de imagens permitido é 6");
-        return;
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error('O número máximo de imagens permitido é 6');
+      return;
     }
-    // let geolocation = {}
-    // let location
-    // if(geolocationEnabled){
-    //     precisa criar metodo de pagamento
-    // }
 
-    async function storeImage(image){
-        return new Promise((resolve,reject) => {
-            const storage = getStorage()
-            const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
-            const storageRef = ref(storage, filename);
-            const uploadTask = uploadBytesResumable(storageRef, image);
-            uploadTask.on("state_changed",
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log("Upload is " + progress + "% done");
-                switch (snapshot.state) {
-                    case "paused":
-                        console.log("Upload is paused");
-                        break;
-                    case "running":
-                        console.log("Upload is running");
-                        break;
-                }
-            },
-            (error) => {
-                reject(error)
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    resolve(downloadURL);
-                });
+    async function storeImage(image) {
+      return new Promise((resolve, reject) => {
+        const storage = getStorage();
+        const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+        const storageRef = ref(storage, filename);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
             }
+          },
+          (error) => {
+            reject(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL);
+            });
+          }
         );
-    });
-}
-    
+      });
+    }
+
     const imgUrls = await Promise.all(
-        [...images]
-        .map((image) => storeImage(image))
-        ).catch((error) => {
-            setLoading(false)
-            toast.error("Ocorreu um erro ao enviar as imagens!")
-            return;
-        });
+      [...images].map((image) => storeImage(image))
+    ).catch((error) => {
+      setLoading(false);
+      toast.error('Ocorreu um erro ao enviar as imagens!');
+      return;
+    });
 
     const formDataCopy = {
-        ...formData, 
-        imgUrls,
-        timestamp: serverTimestamp(),
-        userRef: auth.currentUser.uid,
+      ...formData,
+      imgUrls,
+      timestamp: serverTimestamp(),
+      userRef: auth.currentUser.uid,
     };
     delete formDataCopy.images;
-    !formDataCopy.offer && delete formDataCopy.discountedPrice;
-    const docRef = await addDoc(collection(db, "listings"), formDataCopy);
-    setLoading(false)
-    toast.success("Via enviada!!")
-    // navigate(`/category/${formDataCopy.type}/${docRef.id}`); REDIRECIONA PARA A PÁGINA DA VIA ENVIADA
-    navigate(`/profile`); //REDIRECIONA PARA A PÁGINA DE PERFIL
+
+    const docRef = await addDoc(collection(db, 'listings'), formDataCopy);
+    setLoading(false);
+    toast.success('Via enviada!!');
+    navigate(`/profile`);
   }
-        if(loading){
+
+  if (loading) {
     return <Spinner />;
   }
   
