@@ -6,12 +6,13 @@ import {
   where,
   orderBy,
   limit,
-  or
+  or,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import Slider from "../components/Slider";
 import ListingItem from "../components/ListingItem";
 
+//funcionando
 export default function Home() {
   const [listings, setListings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,7 +21,7 @@ export default function Home() {
     async function fetchListings() {
       try {
         const listingRef = collection(db, "listings");
-        let q = query(listingRef, orderBy("timestamp", "desc"), limit(4));
+        let q = query(listingRef, orderBy("timestamp", "desc"), limit(9));
 
         // If search term is provided, add where clauses to the query
         if (searchTerm.trim() !== "") {
@@ -81,26 +82,12 @@ export default function Home() {
           </button>
         </div>
       </section>
-      {/* <main className="grid gird-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <main className="grid gird-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         {listings.map((listing) => (
           <div key={listing.id}>
-            <main className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {listings.map((listing) => (
-                <div key={listing.id}>
-                  <ListingItem listing={listing.data} id={listing.id} />
-                </div>
-              ))}
-            </main>
+            <ListingItem listing={listing.data} id={listing.id} />
           </div>
         ))}
-      </main> */}
-      <main className="grid gird-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {searchTerm.trim() !== "" &&
-          listings.map((listing) => (
-            <div key={listing.id}>
-              <ListingItem listing={listing.data} id={listing.id} />
-            </div>
-          ))}
       </main>
     </div>
   );

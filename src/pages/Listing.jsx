@@ -15,6 +15,7 @@ export default function Listing() {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   SwiperCore.use([Autoplay, Navigation, Pagination]);
+
   useEffect(() => {
     async function fetchListing() {
       const docRef = doc(db, "listings", params.listingId);
@@ -26,9 +27,14 @@ export default function Listing() {
     }
     fetchListing();
   }, [params.listingId]);
+
   if (loading) {
     return <Spinner />;
   }
+
+  const formattedDate = listing.dia
+    ? new Date(`${listing.dia}T12:00:00Z`).toLocaleDateString("pt-BR")
+    : "";
 
   return (
     <main>
@@ -41,16 +47,40 @@ export default function Listing() {
       >
         {listing.imgUrls.map((url, index) => (
           <SwiperSlide key={index}>
-              <div
-                className="relative w-full overflow-hidden h-[300px]"
-                style={{
-                  background: `url(${listing.imgUrls[index]}) center no-repeat`,
-                  backgroundSize: "cover",
-                }}
-              ></div>
+            <div
+              className="relative w-full overflow-hidden h-[300px]"
+              style={{
+                background: `url(${listing.imgUrls[index]}) center no-repeat`,
+                backgroundSize: "cover",
+              }}
+            ></div>
           </SwiperSlide>
         ))}
       </Swiper>
+      {/* <Swiper slidesPerView={1} navigation effect="fade" modules={[EffectFade]}>
+        {listing.imgUrls.map((url, index) => (
+          <SwiperSlide key={index}>
+            <a
+              href={listing.imgUrls[index]}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div
+                className="relative w-full overflow-hidden"
+                style={{
+                  paddingBottom: "18%", // Mantém a proporção 4:3 para as imagens
+                }}
+              >
+                <img
+                  className="absolute top-0 left-0 w-full h-full object-cover"
+                  src={url}
+                  alt={`Imagem ${index}`}
+                />
+              </div>
+            </a>
+          </SwiperSlide>
+        ))}
+      </Swiper> */}
 
       <div className="m-4 flex flex-col md:flex-row max-w-6xl lg:mx-auto p-4 rounded-lg border-3 shadow-lg bg-white lg:space-x-5">
         <div className="w-full h-[300px] lg-[500px] ">
@@ -65,9 +95,8 @@ export default function Listing() {
           </p>
           <p className=" flex items-center mt-1">
             Data de emissão do CT:{" "}
-            <span className="text-pink-900 ml-1">
-              {new Date(listing.dia).toLocaleDateString("pt-BR")}
-            </span>
+            {/* <span className="text-pink-900 ml-1">{formattedDate}</span> */}
+            <span className="text-pink-900 ml-1">{listing.dia}</span>
           </p>
           <p className="">
             Número da nota fiscal: <span>{listing.nf}</span>
@@ -79,15 +108,7 @@ export default function Listing() {
             Entrar em contato com o Motorista?
             <BsWhatsapp size={20} className="text-green-900 ml-2 mr-1" />
             <a
-              href={`https://api.whatsapp.com/send?phone=${
-                listing.whatsapp
-              }&text=Olá ${listing.motorista}, a entrega do CT ${
-                listing.ct
-              } de ${listing.carregamento} para ${
-                listing.descarga
-              } do dia ${new Date(listing.dia).toLocaleDateString(
-                "pt-BR"
-              )}, foi efetuada? Por favor, nos envie a volta assinada para que possamos dar baixa no sistema! A Rota Nova agradece!`}
+              href={`https://api.whatsapp.com/send?phone=${listing.whatsapp}&text=Olá ${listing.motorista}, a entrega do CT ${listing.ct} de ${listing.carregamento} para ${listing.descarga} do dia ${formattedDate}, foi efetuada? Por favor, nos envie a volta assinada para que possamos dar baixa no sistema! A Rota Nova agradece!`}
               className="text-green-900 hover:underline cursor-pointer hover:text-green-950"
             >
               {listing.whatsapp}
@@ -95,7 +116,7 @@ export default function Listing() {
           </p>
         </div>
 
-        <div className="w-full h-[300px] lg-[500px] z-10 overflow-x-hidden">
+        {/* <div className="w-full h-[300px] lg-[500px] z-10 overflow-x-hidden">
           <Swiper
             slidesPerView={1}
             navigation
@@ -116,6 +137,39 @@ export default function Listing() {
                       backgroundSize: "contain", // Altere o tamanho da imagem para 'contain'
                     }}
                   ></div>
+                </a>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div> */}
+        <div className="w-full h-[300px] lg-[500px] z-10 overflow-x-hidden">
+          <Swiper
+            slidesPerView={1}
+            navigation
+            effect="fade"
+            modules={[EffectFade]}
+            pagination={{bulletClass: 'custom-bullet' }}
+            // className="swiper-container"
+          >
+            {listing.imgUrls.map((url, index) => (
+              <SwiperSlide key={index}>
+                <a
+                  href={listing.imgUrls[index]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div
+                    className="relative w-full overflow-hidden"
+                    style={{
+                      paddingBottom: "50%", // Mantém a proporção 4:3 para as imagens
+                    }}
+                  >
+                    <img
+                      className="absolute top-0 left-0 w-full h-full object-cover"
+                      src={url}
+                      alt={`Imagem ${index}`}
+                    />
+                  </div>
                 </a>
               </SwiperSlide>
             ))}

@@ -1,0 +1,257 @@
+import React, { useEffect, useState } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  or,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import Slider from "../components/Slider";
+import ListingItem from "../components/ListingItem";
+
+//funcionando
+export default function Home() {
+  const [listings, setListings] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    async function fetchListings() {
+      try {
+        const listingRef = collection(db, "listings");
+        let q = query(listingRef, orderBy("timestamp", "desc"), limit(9));
+
+        // If search term is provided, add where clauses to the query
+        if (searchTerm.trim() !== "") {
+          q = query(
+            listingRef,
+            or(
+              where("ct", "==", searchTerm),
+              where("nf", "==", searchTerm),
+              where("motorista", "==", searchTerm.toUpperCase()),
+              where("carregamento", "==", searchTerm.toUpperCase()),
+              where("descarga", "==", searchTerm.toUpperCase()),
+              where("dia", "==", searchTerm)
+            ),
+            orderBy("timestamp", "desc"),
+            limit(4)
+          );
+        }
+
+        const querySnap = await getDocs(q);
+        const fetchedListings = [];
+        querySnap.forEach((doc) => {
+          fetchedListings.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        setListings(fetchedListings);
+      } catch (error) {
+        console.log("Error fetching listings:", error);
+      }
+    }
+
+    fetchListings();
+  }, [searchTerm]);
+
+  const handleSearch = () => {
+    // Fetch listings with the provided search term
+    setSearchTerm(searchTerm.trim());
+  };
+
+  return (
+    <div>
+      <Slider />
+      <section className="bg-gray p-4 rounded-lg w-full max-w-8xl mx-auto">
+        <div className="flex justify-center items-center gap-2">
+          <input
+            id="searchInput"
+            placeholder="Buscar por CT, NF, motorista, carregamento ou descarga"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full border-2 rounded-lg h-9 px-3 outline-none border-gray-300 focus:outline-none focus:border-blue-500"
+          />
+          <button
+            className="bg-blue-500 h-9 px-8 rounded-lg text-white font-medium text-lg"
+            onClick={handleSearch}
+          >
+            Buscar
+          </button>
+        </div>
+      </section>
+      <main className="grid gird-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {listings.map((listing) => (
+          <div key={listing.id}>
+            <ListingItem listing={listing.data} id={listing.id} />
+          </div>
+        ))}
+      </main>
+    </div>
+  );
+}
+
+
+//Teste
+// export default function Home() {
+//   // Offers
+//   const [offerListings, setOfferListings] = useState(null);
+//   useEffect(() => {
+//     async function fetchListings() {
+//       try {
+//         // get reference
+//         const listingsRef = collection(db, "listings");
+//         // create the query
+//         const q = query(
+//           listingsRef,
+//           where("offer", "==", true),
+//           orderBy("timestamp", "desc"),
+//           limit(4)
+//         );
+//         // execute the query
+//         const querySnap = await getDocs(q);
+//         const listings = [];
+//         querySnap.forEach((doc) => {
+//           return listings.push({
+//             id: doc.id,
+//             data: doc.data(),
+//           });
+//         });
+//         setOfferListings(listings);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     }
+//     fetchListings();
+//   }, []);
+//   // Vias entregues
+//   const [entregueListings, setEntregueListings] = useState(null);
+//   useEffect(() => {
+//     async function fetchListings() {
+//       try {
+//         // get reference
+//         const listingsRef = collection(db, "listings");
+//         // create the query
+//         const q = query(
+//           listingsRef,
+//           where("type", "==", "entregue"),
+//           orderBy("timestamp", "desc"),
+//           limit(4)
+//         );
+//         // execute the query
+//         const querySnap = await getDocs(q);
+//         const listings = [];
+//         querySnap.forEach((doc) => {
+//           return listings.push({
+//             id: doc.id,
+//             data: doc.data(),
+//           });
+//         });
+//         setEntregueListings(listings);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     }
+//     fetchListings();
+//   }, []);
+//   // Vias a entregar
+//   const [EntregarListings, setEntregarListings] = useState(null);
+//   useEffect(() => {
+//     async function fetchListings() {
+//       try {
+//         // get reference
+//         const listingsRef = collection(db, "listings");
+//         // create the query
+//         const q = query(
+//           listingsRef,
+//           where("type", "==", "aEntregar"),
+//           orderBy("timestamp", "desc"),
+//           limit(4)
+//         );
+//         // execute the query
+//         const querySnap = await getDocs(q);
+//         const listings = [];
+//         querySnap.forEach((doc) => {
+//           return listings.push({
+//             id: doc.id,
+//             data: doc.data(),
+//           });
+//         });
+//         setEntregarListings(listings);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     }
+//     fetchListings();
+//   }, []);
+//   return (
+//     <div>
+//       <Slider />
+//       <div className="max-w-6xl mx-auto pt-4 space-y-6">
+//         {offerListings && offerListings.length > 0 && (
+//           <div className="m-2 mb-6">
+//             <h2 className="px-3 text-2xl mt-6 font-semibold">Vias recentes</h2>
+//             <Link to="/offers">
+//               <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
+//                 Show more offers
+//               </p>
+//             </Link>
+//             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+//               {offerListings.map((listing) => (
+//                 <ListingItem
+//                   key={listing.id}
+//                   listing={listing.data}
+//                   id={listing.id}
+//                 />
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//         {entregueListings && entregueListings.length > 0 && (
+//           <div className="m-2 mb-6">
+//             <h2 className="px-3 text-2xl mt-6 font-semibold">Vias entregues</h2>
+//             <Link to="/category/entregue">
+//               <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
+//                 Mostrar todas as vias entregues
+//               </p>
+//             </Link>
+//             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+//               {entregueListings.map((listing) => (
+//                 <ListingItem
+//                   key={listing.id}
+//                   listing={listing.data}
+//                   id={listing.id}
+//                 />
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//         {entregarListings && entregarListings.length > 0 && (
+//           <div className="m-2 mb-6">
+//             <h2 className="px-3 text-2xl mt-6 font-semibold">
+//               Vias a entregar
+//             </h2>
+//             <Link to="/category/entregar">
+//               <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
+//                 Mostrar vias que ainda não foram entregues
+//               </p>
+//             </Link>
+//             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+//               {entregarListings.map((listing) => (
+//                 <ListingItem
+//                   key={listing.id}
+//                   listing={listing.data}
+//                   id={listing.id}
+//                 />
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+

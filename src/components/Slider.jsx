@@ -14,21 +14,25 @@ export default function Slider() {
   const [loading, setLoading] = useState(true);
   SwiperCore.use([Autoplay, Pagination, Navigation]);
   const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchListings() {
-      //get reference
       const listingsRef = collection(db, "listings");
-      //create the query
-      const q = query(listingsRef, orderBy("timestamp", "desc"), limit(5));
-      //execute the query
+      const q = query(listingsRef, orderBy("timestamp", "desc"), limit(6));
       const querySnap = await getDocs(q);
       const listings = [];
+      
       querySnap.forEach((doc) => {
-        return listings.push({
-          id: doc.id,
-          data: doc.data(),
-        });
+        const data = doc.data();
+        // Verifica se há imagens na lista de URLs
+        if (data.imgUrls && data.imgUrls.length > 0) {
+          listings.push({
+            id: doc.id,
+            data: data,
+          });
+        }
       });
+
       setListings(listings);
       setLoading(false);
     }
@@ -38,38 +42,32 @@ export default function Slider() {
   if (loading) {
     return <Spinner />;
   }
-  if (listings.length === 0) {
-    return <></>;
+
+  if (!listings || listings.length === 0) {
+    return null;
   }
+
   return (
-    listings && (
-      <>
-        <Swiper
-          slidesPerView={1}
-          navigation
-          pagination={{ type: "progressbar" }}
-          effect="fade"
-          modules={[EffectFade]}
-          autoplay={{ delay: 3000 }}
-        >
-          {listings.map(({ data, id }) => (
-            <SwiperSlide
-              key={id}
-              onClick={() => navigate(`/category/${data.type}/${id}`)}
-            >
-              <div
-                style={{
-                  background: `url(${data.imgUrls[0]}) center, no-repeat`,
-                  backgroundSize: "cover",
-                }}
-                className="relative w-full h-[300px] overflow-hidden"
-              ></div>
-              <p className="text-[#f1faee] absolute left-1 top-3 font-medium max-w-[90%] bg-[#457b9d] shadow-lg opacity-90 p-2 rounded-br-3xl">{data.ct}</p>
-              <p className="text-[#f1faee] absolute left-1 bottom-1 font-semibold max-w-[90%] bg-[#e63946] shadow-lg opacity-90 p-2 rounded-tr-3xl">{data.descarga}</p>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </>
-    )
+    <Swiper
+      slidesPerView={1}
+      pagination={{ type: "progressbar" }}
+      effect="fade"
+      modules={[EffectFade]}
+      autoplay={{ delay: 3000 }}
+    >
+      {listings.map(({ data, id }) => (
+        <SwiperSlide key={id} onClick={() => navigate(`/category/${data.type}/${id}`)}>
+          <div
+            style={{
+              background: `url(${data.imgUrls[0]}) center, no-repeat`,
+              backgroundSize: "cover",
+            }}
+            className="relative w-full h-[300px] overflow-hidden"
+          ></div>
+          <p className="text-[#f1faee] absolute left-1 top-3 font-medium max-w-[90%] bg-[#457b9d] shadow-lg opacity-90 p-2 rounded-br-3xl">{data.ct}</p>
+          <p className="text-[#f1faee] absolute left-1 bottom-1 font-semibold max-w-[90%] bg-[#e63946] shadow-lg opacity-90 p-2 rounded-tr-3xl">{data.descarga}</p>
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
 }

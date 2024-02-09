@@ -37,13 +37,13 @@ export default function Header() {
                     pathMatchRoute("/") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
                   }`}
                   onClick={() => navigate("/")}
-                >Home</li>
+                >Buscar Via</li>
 
-                <li className={`cursor-pointer py-3 text-sm font-semibold ${
+                {/* <li className={`cursor-pointer py-3 text-sm font-semibold ${
                     pathMatchRoute("/vias") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"
                   }`}
                 onClick={() => navigate("/vias")}
-                >Vias</li>
+                >Vias</li> */}
 
                 <li className={`cursor-pointer py-3 text-sm font-semibold ${
                     pathMatchRoute("/sign-in") || pathMatchRoute("/profile") ? "text-black border-b-2 border-red-500" : "text-gray-400 border-b-2 border-transparent"

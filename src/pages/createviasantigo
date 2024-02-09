@@ -25,10 +25,10 @@ export default function CreateVias() {
     obs: "",
     latitude: 0,
     longitude: 0,
-    images: [],
+    images: {}
   });
 
-  const { type, ct, nf, motorista, carregamento, descarga, dia, whatsapp, obs, images } = formData;
+  const { type, ct, nf, motorista, carregamento, descarga, dia, whatsapp, obs, latitude, longitude, images } = formData;
 
   function onChange(e) {
     let boolean = null;
@@ -43,7 +43,7 @@ export default function CreateVias() {
     if (e.target.files) {
       setFormData((prevState) => ({
         ...prevState,
-        images: [...prevState.images, ...Array.from(e.target.files)],
+        images: e.target.files
       }));
     }
 
@@ -57,39 +57,66 @@ export default function CreateVias() {
 
       setFormData((prevState) => ({
         ...prevState,
-        [e.target.id]: boolean ?? value,
+        [e.target.id]: boolean ?? value
       }));
     }
-  }
-
-  function removeImage(index) {
-    setFormData((prevState) => ({
-      ...prevState,
-      images: prevState.images.filter((_, i) => i !== index),
-    }));
   }
 
   async function onSubmit(e) {
     e.preventDefault();
     setLoading(true);
   
-    if (images.length > 6) {
+    if (Object.keys(images).length > 6) {
       setLoading(false);
       toast.error("O número máximo de imagens permitido é 6");
       return;
     }
   
-    if (type === "entregue" && images.length === 0) {
+    if (type === "entregue" && Object.keys(images).length === 0) {
       setLoading(false);
       toast.error("Por favor, envie pelo menos uma imagem caso essa via tenha sido entregue");
       return;
     }
 
-    const imgUrls = [];
-    for (const image of images) {
-      const imgUrl = await storeImage(image);
-      imgUrls.push(imgUrl);
+    async function storeImage(image) {
+      return new Promise((resolve, reject) => {
+        const storage = getStorage();
+        const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+        const storageRef = ref(storage, filename);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {
+            reject(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
     }
+    
+    const imgUrls = await Promise.all(
+      Object.values(images).map((image) => storeImage(image))
+    ).catch((error) => {
+      setLoading(false);
+      toast.error("Ocorreu um erro ao enviar as imagens!");
+      return;
+    });
 
     const dataLocal = new Date(`${dia}T12:00:00Z`);
     const dataFormatada = new Date(dataLocal).toLocaleDateString();
@@ -114,38 +141,6 @@ export default function CreateVias() {
       setLoading(false);
       toast.error("Ocorreu um erro ao enviar a via!");
     }
-  }
-
-  async function storeImage(image) {
-    return new Promise((resolve, reject) => {
-      const storage = getStorage();
-      const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
-      const storageRef = ref(storage, filename);
-      const uploadTask = uploadBytesResumable(storageRef, image);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {
-          reject(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            resolve(downloadURL);
-          });
-        }
-      );
-    });
   }
 
   if (loading) {
@@ -277,55 +272,18 @@ export default function CreateVias() {
           <div className="col-span-2">
             <p className='text-lg font-semibold'>Imagens</p>
             <p className='text-gray-600'>A primeira imagem será a de capa (máx 6)</p>
-            {images.map((image, index) => (
-              <div key={index} className='relative mt-2'>
-                <img
-                  src={URL.createObjectURL(image)}
-                  alt={`Imagem ${index + 1}`}
-                  className='w-32 h-32 object-cover rounded'
-                />
-                <button
-                  type='button'
-                  onClick={() => removeImage(index)}
-                  className='absolute top-0 right-0 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out'
-                >
-                  <svg
-                    className='w-4 h-4 text-gray-600'
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 1a1 1 0 011 1v11a1 1 0 11-2 0V2a1 1 0 011-1zm-1.707 4.293a1 1 0 011.414 0L10 7.586l1.293-1.293a1 1 0 111.414 1.414L11.414 9l1.293 1.293a1 1 0 01-1.414 1.414L10 10.414l-1.293 1.293a1 1 0 01-1.414-1.414L8.586 10 7.293 8.707a1 1 0 010-1.414L8.586 6 7.293 4.707a1 1 0 010-1.414L8.586 3l1.293 1.293zM3.293 6.707a1 1 0 010-1.414L6 3.586l1.293-1.293a1 1 0 011.414 1.414L7.414 5l1.293 1.293a1 1 0 01-1.414 1.414L6 6.414l-1.293 1.293a1 1 0 11-1.414-1.414L4.586 5 3.293 3.707a1 1 0 010-1.414L4.586 2 5.879.707a1 1 0 111.414 1.414L7.414 5l1.293 1.293a1 1 0 11-1.414 1.414L6 6.414l-1.293 1.293a1 1 0 01-1.414-1.414L4.586 5 3.293 6.293z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
             <input
               type='file'
               id='images'
               onChange={onChange}
               accept='.jpg,.png,.jpeg'
               multiple
-              className='hidden'
+              className='w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:bg-white focus:border-slate-600'
             />
-            <label
-              htmlFor="images"
-              className='block mt-2 w-full px-3 py-1.5 text-center text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:bg-white focus:border-slate-600 cursor-pointer'
-            >
-              Adicionar Imagens
-            </label>
-          </div>
-          <div className="col-span-2">
-            <button type='submit' className='w-full px-7 py-3 mt-6 bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'>
-              Enviar
-            </button>
           </div>
         </div>
+        <button type='submit' className='w-full px-7 py-3 mt-6 bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'>Enviar</button>
       </form>
     </main>
-  );
+  )
 }
