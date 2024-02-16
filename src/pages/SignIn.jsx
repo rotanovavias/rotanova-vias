@@ -43,7 +43,7 @@ export default function SignIn() {
       <div className='flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto'>
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
           <img
-            src='https://firebasestorage.googleapis.com/v0/b/rotanovavias.appspot.com/o/rota.svg?alt=media&token=0be8835b-8fd5-441b-95fd-134155535ea2'
+            src='https://firebasestorage.googleapis.com/v0/b/rotavias.appspot.com/o/logo.jpeg?alt=media&token=7a7694dc-fd89-4827-9e42-8191225f64c4'
             alt='logoSingIn'
             onClick={() => navigate("/")}
             className='w-full rounded'
