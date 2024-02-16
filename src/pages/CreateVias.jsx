@@ -91,12 +91,12 @@ export default function CreateVias() {
       imgUrls.push(imgUrl);
     }
 
-    const dataLocal = new Date(`${dia}T12:00:00Z`);
-    const dataFormatada = new Date(dataLocal).toLocaleDateString();
+    // const dataLocal = new Date(`${dia}T12:00:00Z`);
+    // const dataFormatada = new Date(dia).toLocaleDateString();
 
     const formDataCopy = {
       ...formData,
-      dia: dataFormatada,
+      dia: dia,
       imgUrls,
       timestamp: serverTimestamp(),
       userRef: auth.currentUser.uid,
