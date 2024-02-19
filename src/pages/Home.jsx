@@ -21,7 +21,7 @@ export default function Home() {
     async function fetchListings() {
       try {
         const listingRef = collection(db, "listings");
-        let q = query(listingRef, orderBy("timestamp", "desc"), limit(9));
+        let q = query(listingRef, orderBy("timestamp", "desc"), limit(20));
 
         // If search term is provided, add where clauses to the query
         if (searchTerm.trim() !== "") {
