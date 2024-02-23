@@ -38,7 +38,6 @@ export default function Home() {
               where("dia", "==", searchTerm)
             ),
             orderBy(sortBy, sortDirection),
-            limit(4)
           );
         }
 
