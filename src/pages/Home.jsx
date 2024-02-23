@@ -89,13 +89,13 @@ export default function Home() {
             className="w-full border-2 rounded-lg h-9 px-3 outline-none border-gray-300 focus:outline-none focus:border-blue-500"
           />
           <button
-            className="bg-blue-500 h-9 px-8 rounded-lg text-white font-medium text-lg"
+            className="bg-blue-500 h-9 px-8 rounded-lg text-white font-medium text-lg shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800"
             onClick={handleSearch}
           >
             Buscar
           </button>
           <button
-            className="bg-gray-400 h-9 px-8 rounded-lg text-white font-medium text-lg flex items-center"
+            className="bg-gray-400 h-9 px-8 rounded-lg text-white font-medium text-lg flex items-center shadow-md hover:bg-gray-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-gray-800"
             onClick={toggleView}
           >
             {isTableView ? "Grade" : "Tabela"}
@@ -109,7 +109,7 @@ export default function Home() {
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                   <button
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="text-indigo-600 hover:text-indigo-900 w-full px-7 py-3 text-sm font-medium uppercase  ease-in-out"
                     onClick={() => handleSort("ct")}
                   >
                     <span className="sr-only">CT</span>
@@ -118,7 +118,7 @@ export default function Home() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                   <button
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="text-indigo-600 hover:text-indigo-900 w-full px-7 py-3 text-sm font-medium uppercase  ease-in-out"
                     onClick={() => handleSort("nf")}
                   >
                     <span className="sr-only">NF</span>
@@ -127,7 +127,7 @@ export default function Home() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                   <button
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="text-indigo-600 hover:text-indigo-900 w-full px-7 py-3 text-sm font-medium uppercase  ease-in-out"
                     onClick={() => handleSort("motorista")}
                   >
                     <span className="sr-only">Motorista</span>
@@ -136,7 +136,7 @@ export default function Home() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                   <button
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="text-indigo-600 hover:text-indigo-900 w-full px-7 py-3 text-sm font-medium uppercase ease-in-out"
                     onClick={() => handleSort("carregamento")}
                   >
                     <span className="sr-only">Carregamento</span>
@@ -145,7 +145,7 @@ export default function Home() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                   <button
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="text-indigo-600 hover:text-indigo-900 w-full px-7 py-3 text-sm font-medium uppercase ease-in-out"
                     onClick={() => handleSort("descarga")}
                   >
                     <span className="sr-only">Descarga</span>
@@ -154,7 +154,8 @@ export default function Home() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">
                   <button
-                    className="text-indigo-600 hover:text-indigo-900"
+                    className="text-indigo-600 hover:text-indigo-900 w-full px-7 py-3 text-sm font-medium uppercase ease-in-out"
+                    // className=" hover:text-indigo-900 w-full bg-blue-600 text-white px-7 py-3 text-sm font-medium uppercase rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800 mt-4"
                     onClick={() => handleSort("dia")}
                   >
                     <span className="sr-only">Dia</span>
@@ -166,50 +167,54 @@ export default function Home() {
             <tbody className="bg-white divide-y divide-gray-200">
               {listings.map((listing) => (
                 <tr key={listing.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-center hover:text-blue-900 font-medium uppercase rounded shadow-md ease-in-out">
                     <Link
                       to={`/category/${listing.data.type}/${listing.id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      // className="text-indigo-600 hover:text-indigo-900"
                     >
                       {listing.data.ct}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-center hover:text-blue-900 font-medium uppercase rounded shadow-md ease-in-out">
+                    {" "}
                     <Link
                       to={`/category/${listing.data.type}/${listing.id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      // className="text-indigo-600 hover:text-indigo-900"
                     >
                       {listing.data.nf}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-center hover:text-blue-900 font-medium uppercase rounded shadow-md ease-in-out">
                     <Link
                       to={`/category/${listing.data.type}/${listing.id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      // className="text-indigo-600 hover:text-indigo-900"
                     >
                       {listing.data.motorista}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-center hover:text-blue-900 font-medium uppercase rounded shadow-md ease-in-out">
+                    {" "}
                     <Link
                       to={`/category/${listing.data.type}/${listing.id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      // className="text-indigo-600 hover:text-indigo-900"
                     >
                       {listing.data.carregamento}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-center hover:text-blue-900 font-medium uppercase rounded shadow-md ease-in-out">
+                    {" "}
                     <Link
                       to={`/category/${listing.data.type}/${listing.id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      // className="text-indigo-600 hover:text-indigo-900"
                     >
                       {listing.data.descarga}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-center hover:text-blue-900 font-medium uppercase rounded shadow-md ease-in-out">
+                    {" "}
                     <Link
                       to={`/category/${listing.data.type}/${listing.id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      // className="text-indigo-600 hover:text-indigo-900"
                     >
                       {listing.data.dia}
                     </Link>
