@@ -81,3 +81,30 @@ body{
 	margin: 0 auto;
 }
 
+table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	background-color: #f5f5f5;
+	width: 100%;
+	margin-bottom: 20px;
+  }
+  
+  th, td {
+	padding: 8px;
+	text-align: left;
+	align-items: center;
+  }
+  
+  th {
+	background-color: #333;
+	color: #fff;
+  }
+  
+  tr:nth-child(even) {
+	background-color: #ddd;
+  }
+  
+  tr:hover {
+	background-color: #ccc;
+  }
+  
